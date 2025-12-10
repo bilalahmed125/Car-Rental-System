@@ -1,0 +1,15 @@
+# VS Code settings
+.vscode/
+
+# Java build files
+bin/
+build/
+out/
+*.class
+
+# OS junk
+.DS_Store
+
+# IDE junk
+.idea/
+*.iml
