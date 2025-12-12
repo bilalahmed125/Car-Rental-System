@@ -42,9 +42,9 @@ public abstract class Vehicle implements Rentable,Trackable{
 
 
     //methods
-    public void addMaintenanceRecord(String description, String date){
+    public void addMaintenanceRecord(String description, String date,double cost){
         //creating object of maintenance recrod 
-        MaintenanceRecord record = new MaintenanceRecord(description,date);
+        MaintenanceRecord record = new MaintenanceRecord(description,date,cost);
         //passed the object to the ArrayLISt
         this.maintenanceHistory.add(record);        
     }
