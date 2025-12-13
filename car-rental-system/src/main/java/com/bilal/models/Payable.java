@@ -1,6 +1,8 @@
 package com.bilal.models;
 
-public interface Payable {
+import java.io.Serializable;
+
+public interface Payable extends Serializable{
     
             //abstract methods
     //processes the paymetn (true if payment successful and flase otherwise)
