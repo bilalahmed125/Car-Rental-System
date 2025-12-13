@@ -1,6 +1,7 @@
 package com.bilal.models;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public abstract class Vehicle implements Rentable,Trackable{
 
@@ -42,7 +43,7 @@ public abstract class Vehicle implements Rentable,Trackable{
 
 
     //methods
-    public void addMaintenanceRecord(String description, String date,double cost){
+    public void addMaintenanceRecord(String description, LocalDate date,double cost){
         //creating object of maintenance recrod 
         MaintenanceRecord record = new MaintenanceRecord(description,date,cost);
         //passed the object to the ArrayLISt

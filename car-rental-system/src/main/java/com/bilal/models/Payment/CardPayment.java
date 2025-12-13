@@ -21,9 +21,9 @@ public class CardPayment implements Payable{
     @Override
     public boolean processPayment(double amount){
         LocalDate today = LocalDate.now();          //stores today's date (from computer)
+        this.temporaryAmount = amount;          //stores the amount temporarily for further use        
         if (!expiryDate.isBefore(today)){           //checks if the card is valid or not (not expired)
             System.out.println("Payment Success : "+ amount);   
-            this.temporaryAmount = amount;          //stores the amount temporarily for further use
             paymentStatus = true;                   //updates the payment status for furhter use
             return true;                
         }
@@ -37,6 +37,7 @@ public class CardPayment implements Payable{
         if(paymentStatus){                      //prints the message based on the paymentstatus 
            return "Payment amount: " + temporaryAmount + " | Card Holder Name: " +  cardHolderName 
                     + " | Payment Done Via Card" ;
+            
         }
         else{
             return "Payment of Amount: " + temporaryAmount + " | Failed!  | CardHolder Name: "+cardHolderName ;

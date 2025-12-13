@@ -1,24 +1,26 @@
 package com.bilal.models;
 
+import java.time.LocalDate; 
+
 public class MaintenanceRecord {
     private String description;
-    private String date;
+    private LocalDate date;
     private double cost;
 
     //constructor
-    public MaintenanceRecord(String description, String date, double cost){
+    public MaintenanceRecord(String description, LocalDate date, double cost){
         this.description = description;
         this.date = date;
     }
 
     //getters
     public String getDescription(){ return description; }
-    public String getDate(){ return date; }
+    public LocalDate getDate(){ return date; }
     public double getCost(){return cost;}
     
     //setters
     public void setDescription(String des){this.description = des;}
-    public void setDate(String date){this.date = date;}
+    public void setDate(LocalDate date){this.date = date;}
     public void setCost(double cost){this.cost = cost;}
 
     //Methods

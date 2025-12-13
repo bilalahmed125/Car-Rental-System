@@ -18,9 +18,9 @@ public class CashPayment implements Payable{
     private double temporaryAmount = 0;
     @Override
     public boolean processPayment(double amount){
+        temporaryAmount = amount;                       //stores amount for further use
         if(cashGiven >= amount){                            //checks if the given amount can cover the expenses
             System.out.println("Payment Successful: " + amount);    
-            temporaryAmount = amount;                       //stores amount for further use
             change = cashGiven - amount;                    //calculates and stores cahnge amount
             return paymentStatus = true;                    //returns true
         }

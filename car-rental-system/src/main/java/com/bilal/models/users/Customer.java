@@ -3,6 +3,7 @@ package com.bilal.models.users;
 import java.util.ArrayList;
 
 import com.bilal.models.RentalRecord;
+import com.bilal.models.User;
 
 public class Customer extends User{
     

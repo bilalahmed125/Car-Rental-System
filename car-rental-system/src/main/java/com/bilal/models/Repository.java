@@ -13,7 +13,7 @@ public interface Repository<T> {
     void delete(T item);
 
     //get by ID
-    void getById(String id);
+    T getById(String id);
 
     //get all
     ArrayList<T> getAll();
