@@ -49,16 +49,6 @@ public class UserRepository implements Repository<User>{
         return false;                                           //if no such email is taken , will return flase
     }
 
-    //method for registration (checks if the phone number is taken)
-    public boolean isPhoneTaken(String phone){
-        if(User u : users){
-            if(u.getPhone().equalsIgnoreCase(phone)){
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public ArrayList<User> getAll(){
         return new ArrayList<>(users);                      //returns a copy of the arraylist

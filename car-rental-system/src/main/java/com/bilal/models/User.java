@@ -1,8 +1,6 @@
 package com.bilal.models;
 
-import java.io.Serializable;
-
-public abstract class User implements Serializable{
+public abstract class User{
     private String name;
     private String email;
     private String userId;

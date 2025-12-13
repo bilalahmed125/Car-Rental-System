@@ -1,9 +1,8 @@
 package com.bilal.models;
 
-import java.io.Serializable;
 import java.time.LocalDate; 
 
-public class MaintenanceRecord implements Serializable{
+public class MaintenanceRecord {
     private String description;
     private LocalDate date;
     private double cost;
