@@ -1,12 +1,13 @@
 package com.bilal.models;
 
 //withuot these, we wont be able to make the objects of teh desried classes
-import com.bilal.models.users.Customer;         
+import com.bilal.models.users.Customer;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class RentalRecord {
+public class RentalRecord implements Serializable{
     
     //will be using static strings to define the status
     private static final String STATUS_ACTIVE = "ACTIVE";

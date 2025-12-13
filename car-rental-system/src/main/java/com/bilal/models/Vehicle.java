@@ -1,9 +1,10 @@
 package com.bilal.models;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public abstract class Vehicle implements Rentable,Trackable{
+public abstract class Vehicle implements Rentable,Trackable,Serializable{
 
     private String vehicleId;
     private String make;
@@ -11,6 +12,12 @@ public abstract class Vehicle implements Rentable,Trackable{
     private boolean isAvailable;
     private double baseRatePerDay;
     private String currentLocation = "N/A";
+
+    //Discount Fields
+    private double currentRate; 
+    private boolean isDiscountActive;
+
+    private static int totalVehicleCount = 0;
 
     //composing Maintenance record(just a ref here)
     private ArrayList<MaintenanceRecord> maintenanceHistory ;
@@ -21,6 +28,7 @@ public abstract class Vehicle implements Rentable,Trackable{
         this.make = make;
         this.model = model;
         this.baseRatePerDay = rate;
+        this.currentRate = rate;
         this.isAvailable = true;                            //defautl true
         this.maintenanceHistory = new ArrayList<>();        //array list creted here
     }
@@ -40,7 +48,9 @@ public abstract class Vehicle implements Rentable,Trackable{
     public String getModel(){ return model; }
     public double getBaseRatePerDay(){ return baseRatePerDay; }
     public boolean getAvailibility(){ return isAvailable; }
-
+    public static int getTotalVehicleCount(){ return totalVehicleCount; }
+    public double getCurrentRate(){ return currentRate; }
+    public boolean getIsDiscountAvailable(){ return isDiscountActive; }
 
     //methods
     public void addMaintenanceRecord(String description, LocalDate date,double cost){
@@ -48,6 +58,21 @@ public abstract class Vehicle implements Rentable,Trackable{
         MaintenanceRecord record = new MaintenanceRecord(description,date,cost);
         //passed the object to the ArrayLISt
         this.maintenanceHistory.add(record);        
+    }
+
+    // DICOUNT can be applied on a certain vehicel
+    public void applyDiscount(double percent){
+        if(percent > 0 && percent <= 100){
+            double discountAmount = baseRatePerDay * (percent / 100.0);
+            this.currentRate = baseRatePerDay - discountAmount;
+            this.isDiscountActive = true;
+        }
+    }
+
+    //Reset the discount to normal price
+    public void resetPrice(){
+        this.currentRate = baseRatePerDay;
+        this.isDiscountActive = false;
     }
 
     @Override
