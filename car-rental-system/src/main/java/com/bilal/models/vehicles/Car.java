@@ -6,7 +6,6 @@ public class Car extends Vehicle{
     
     private int numberOfDoors;
     private String transmissionType;
-    private static int carCount= 0;
 
     //constructor
     public Car(String id, String make, String model, double rate, int doors,String transmissionType){
@@ -18,7 +17,6 @@ public class Car extends Vehicle{
     //Getter
     public int getNumberOfDoors(){return numberOfDoors;}
     public String getTransmissionType(){ return transmissionType; }
-    public static int getCarCount(){ return carCount; } 
     
     //setter
     public void setNumberOfDoors(int numberOfDoors){

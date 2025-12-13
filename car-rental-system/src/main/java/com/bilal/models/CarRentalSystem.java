@@ -1,5 +1,6 @@
 package com.bilal.models;
 
+import com.bilal.models.Payment.CardPayment;
 import com.bilal.models.users.*;
 import com.bilal.models.vehicles.*;
 import java.io.*;
@@ -28,8 +29,8 @@ public class CarRentalSystem{
     //1. ===============Registration logic==============
 
 
-    /*
-     * registers a new car.
+    
+    /* registers a new car.
      * throws exception if the ID already exist
      */
 
@@ -44,7 +45,7 @@ public class CarRentalSystem{
 
         //at the end it will store it to the arraylist in vehicle repository
         vehicleRepo.add(newCar);
-        saveData(); //autosave
+        saveData();                 //saves to the file
     }
 
     /*
@@ -60,7 +61,7 @@ public class CarRentalSystem{
         //only creates a bike if no same id is found
         Bike newBike = new Bike(id, make, model, rate, engineCC, helmet);
         vehicleRepo.add(newBike);   //adds to the vehicle repo
-        saveData();                 //saves
+        saveData();                 //saves to the file
     }
     
     // for the BUS (same logic is pasted for bus as for bike and car)
@@ -75,7 +76,7 @@ public class CarRentalSystem{
 
         //at the end it will store it to the arraylist in vehicle repository
         vehicleRepo.add(newBus);
-        saveData(); //autosave
+        saveData();                         //saves to the file
     }
 
     //for van (same logic as beofre)
@@ -90,7 +91,7 @@ public class CarRentalSystem{
 
         //at the end it will store it to the arraylist in vehicle repository
         vehicleRepo.add(newVan);
-        saveData(); //autosave
+        saveData();                             //saves to the file
     }
 
     //=================================CUSTOMER MAKING AND VALIDATION===========-----------------------=
@@ -116,14 +117,14 @@ public class CarRentalSystem{
 
         //stores in arraylist in userrepo
         userRepo.add(newCust);
-        saveData();     ///saves
+        saveData();                 ///saves to the file
     }
 
 
     //2. ==========================RENTAL LOGIC======================
 
 
-    public void rentVehicle(String customerId, String vehicleId, LocalDate rentalDate, int days) throws Exception{
+    public void rentVehicle(String customerId, String vehicleId, LocalDate rentalDate, int days, Payable payment) throws Exception{
         //we will get the obejcts first using the ids
         User user = userRepo.getById(customerId);
         Vehicle vehicle = vehicleRepo.getById(vehicleId);
@@ -144,17 +145,32 @@ public class CarRentalSystem{
         //if everything is sound, then we wil process with the renting
         Customer customer =(Customer) user;
         LocalDate returnDate = rentalDate.plusDays(days); 
+        
+        //estimated cost;
+        double estimatedCost = vehicle.calculateRentalCost(days);
+
+        //process the payment
+        boolean isPaid = payment.processPayment(estimatedCost);
+        if( !isPaid ){
+            //if the payment fails, no car is given
+            throw new IllegalArgumentException("Transaction Failed:  "+payment.getPaymentDetails());
+        }
+        
         //generates a simple unique id for the record(like; R-User-Vehicle-Date)
         String rentalId = "R-" + System.currentTimeMillis(); //this will generate an id LIke R- _here the time in miliseconds from 1970 , 1st jan_
 
-        // The Constructor of RentalRecord handles:
-        // - Setting vehicle.isAvailable = false
-        // - Adding record to Customer's history
+        // The constructor of RentalRecord handles:
+        // a. setting vehicle.isAvailable = flase
+        // b, adding record to customer's history
         RentalRecord record = new RentalRecord(rentalId, customer, vehicle, rentalDate, returnDate);
+
+        //we got the cash, now we will mark the record as paid.
+        String method = (payment instanceof CardPayment) ? "Card" : "Cash";     //ternary operator (short of if else) true = card, false = cash
+        record.markAsPaid(method, payment.getPaymentDetails());
 
         //saves the renteal record
         rentalRepo.add(record);
-        saveData();
+        saveData();                     //saves to the file
     }
 
     public void returnVehicle(String rentalId) throws Exception{
@@ -172,7 +188,7 @@ public class CarRentalSystem{
         //after the checks, this will return if clear
         record.returnVehicle(LocalDate.now());      // Sets status, calculates fees, frees car
         
-        saveData(); 
+        saveData();                             //saves to the file 
     }
 
     //3.================================================FILE HANDLING===============================
@@ -223,16 +239,55 @@ public class CarRentalSystem{
             ois.close();
             fis.close();
 
-        } catch (IOException e) {
+        } catch (IOException e){
             System.out.println("Error reading file: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e){
             System.out.println("Class not found: " + e.getMessage());
         }
     }
 
-    //4, ACCESSORS(for the GUI)
+    //==================================4, ACCESSORS(for the GUI)========================
 
     public VehicleRepository getVehicleRepo(){ return vehicleRepo;}
     public UserRepository getUserRepo(){ return userRepo;}
     public RentalRecordRepository getRentalRepo(){return rentalRepo; }
+
+
+    //========================================5. STATS ==========================
+
+    public int getTotalVehicles(){
+        //this will tell the total number of vehicles we have
+        return vehicleRepo.getAll().size();
+    }
+        //this is for the total unmber of users we have
+    public int getTotalUsers(){
+        return userRepo.getAll().size();
+    }
+        //this is for the total rentalrecords we have
+    public int getTotalRentals(){
+        return rentalRepo.getAll().size();
+    }
+
+
+    //6.    ================== ADMIN FEATURES ==================
+    
+    //1.------0Set Discount----------------
+
+    public void setVehicleDiscount(String vehicleId, double percentage) throws Exception{
+        Vehicle v = vehicleRepo.getById(vehicleId);                     //gets vehicel by id
+        if (v == null) throw new IllegalArgumentException("Vehicle not found.");    //if no vehicle found, will throw expceiton
+        
+        v.applyDiscount(percentage);                                // Updates currentRate 
+        saveData();                                                 // Saves the new price to file
+    }
+
+    //2.---------------Add Maintenance------------------
+    public void addMaintenance(String vehicleId, String description, LocalDate date, double cost) throws Exception {
+        Vehicle v = vehicleRepo.getById(vehicleId);                 //will get vehilce by id.
+        if (v == null) throw new IllegalArgumentException("Vehicle not found.");    //throws exception if no vehicel found with that id
+        
+        v.addMaintenanceRecord(description, date, cost);            //will add maintencnance record to the desired vehicel
+        saveData();                                                 //saves to the file
+    }
+
 }

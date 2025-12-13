@@ -6,7 +6,6 @@ public class Bike extends Vehicle{
 
     private int engineCC;
     private boolean helmetIncluded;
-    private static int bikeCount= 0;
     
     //constructor
     public Bike(String id, String make, String model, double rate,int engineCC, boolean hemlet){
@@ -22,7 +21,6 @@ public class Bike extends Vehicle{
     public boolean getHelmetIncluded(){
         return helmetIncluded;
     }
-    public static int getBikeCount(){ return bikeCount; } 
 
     //seter
     public void setEngineCC(int enginecc){

@@ -17,8 +17,6 @@ public abstract class Vehicle implements Rentable,Trackable,Serializable{
     private double currentRate; 
     private boolean isDiscountActive;
 
-    private static int totalVehicleCount = 0;
-
     //composing Maintenance record(just a ref here)
     private ArrayList<MaintenanceRecord> maintenanceHistory ;
 
@@ -48,7 +46,6 @@ public abstract class Vehicle implements Rentable,Trackable,Serializable{
     public String getModel(){ return model; }
     public double getBaseRatePerDay(){ return baseRatePerDay; }
     public boolean getAvailibility(){ return isAvailable; }
-    public static int getTotalVehicleCount(){ return totalVehicleCount; }
     public double getCurrentRate(){ return currentRate; }
     public boolean getIsDiscountAvailable(){ return isDiscountActive; }
 
@@ -94,7 +91,7 @@ public abstract class Vehicle implements Rentable,Trackable,Serializable{
     
     @Override
     public double calculateRentalCost(int days){
-        return getBaseRatePerDay() * days;
+        return currentRate * days;
     } 
     
     @Override

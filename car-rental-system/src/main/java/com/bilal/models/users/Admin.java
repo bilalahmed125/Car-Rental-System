@@ -9,19 +9,17 @@ import com.bilal.models.RentalRecord;
 public class Admin extends User{
         
     private String role;
-    private static int adminCount = 0;
+ 
 
     //constructor
     public Admin(String userId, String name, String email, String phone, String password, String role){
         super(userId,name,email,phone,password);
         this.role = role;
-        adminCount++;           //increments total number of admins        
     }
 
     //Getter Setters
     public String getRole(){ return role; }
     public void setRole(String role){this.role = role;}
-    public static int getAdminCount(){ return adminCount; }
 
     //------------VEHICLE MANAGEMENT BY ADMIN------------
 

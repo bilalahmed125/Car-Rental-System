@@ -10,10 +10,10 @@ import java.time.temporal.ChronoUnit;
 public class RentalRecord implements Serializable{
     
     //will be using static strings to define the status
-    private static final String STATUS_ACTIVE = "ACTIVE";
-    private static final String STATUS_COMPLETED= "COMPLETED";
-    private static final String STATUS_CANCELLED = "CANCELLED";
-    private static final String STATUS_OVERDUE = "OVERDUE";
+    public static final String STATUS_ACTIVE = "ACTIVE";
+    public static final String STATUS_COMPLETED= "COMPLETED";
+    public static final String STATUS_CANCELLED = "CANCELLED";
+    public static final String STATUS_OVERDUE = "OVERDUE";
 
     private String rentalId;                //The id generated, for the record
     private LocalDate rentalDate;           //the date on which user rented the vehicel
@@ -46,7 +46,7 @@ public class RentalRecord implements Serializable{
         this.returnDate = returnDate;
         this.status = STATUS_ACTIVE;
         this.lateFee = 0;
-        this.isPaid = false;
+        this.isPaid = false;            //default is false and will update manually when needed.
 
         //this will calcualte the rental days and teh cost
         int days = (int) ChronoUnit.DAYS.between(rentalDate,returnDate);
@@ -54,6 +54,7 @@ public class RentalRecord implements Serializable{
 
         this.totalCost = vehicle.calculateRentalCost(days);
 
+        // this will make the vehicel available = false.
         this.rentedVehicle.rent();
 
         //this line means that we will pass teh current object to the customer.
@@ -63,6 +64,12 @@ public class RentalRecord implements Serializable{
     
                     //methods
     
+    //this method is used by system to mark the record as paid, after the payment has processed sucessfuly.
+    public void markAsPaid(String method, String details) {
+        this.isPaid = true;
+        this.paymentMethod = method;
+        this.paymentDetails = details;
+    }
     //method for payment handling
     public boolean processPayment(Payable payment){
         if(isPaid){         //meaning the payment is already done
