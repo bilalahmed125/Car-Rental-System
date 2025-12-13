@@ -5,6 +5,7 @@ import com.bilal.models.users.*;
 import com.bilal.models.vehicles.*;
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarRentalSystem{
@@ -35,6 +36,20 @@ public class CarRentalSystem{
      */
 
     public void registerCar(String id, String make, String model, double rate,int doors, String transmissionType) throws Exception{
+        //checks that the inputs cannot be null
+        if(id == null || id.trim().isEmpty()){
+            throw new IllegalArgumentException("Vehicle ID cannot be empty.");
+        }
+        if(make == null || make.trim().isEmpty()){
+            throw new IllegalArgumentException("Make cannot be empty.");
+        }
+        if(model == null || model.trim().isEmpty()){
+            throw new IllegalArgumentException("Model cannot be empty.");
+        }
+        if(rate <= 0){
+            throw new IllegalArgumentException("Rate must be positive.");
+        }
+        
         //this will check if the id is already linkd to other vehicel
         if(vehicleRepo.getById(id) != null){                                    //this will try to get a vehicle with same id if there is a vehicel with same id then throws an exception bcz id exists already
             throw new IllegalArgumentException("Vehicle ID '" + id + "' is already taken.");
@@ -55,6 +70,20 @@ public class CarRentalSystem{
     */
         //for the Bike
     public void registerBike(String id, String make, String model, double rate, int engineCC, boolean helmet) throws Exception{
+        //checks that the inputs cannot be null
+        if(id == null || id.trim().isEmpty()){
+            throw new IllegalArgumentException("Vehicle ID cannot be empty.");
+        }
+        if(make == null || make.trim().isEmpty()){
+            throw new IllegalArgumentException("Make cannot be empty.");
+        }
+        if(model == null || model.trim().isEmpty()){
+            throw new IllegalArgumentException("Model cannot be empty.");
+        }
+        if(rate <= 0){
+            throw new IllegalArgumentException("Rate must be positive.");
+        }
+        
         if(vehicleRepo.getById(id) != null){            //if same id bike spoted , throws expetion
             throw new IllegalArgumentException("Vehicle ID '" + id + "' is already taken.");
         }
@@ -66,6 +95,20 @@ public class CarRentalSystem{
     
     // for the BUS (same logic is pasted for bus as for bike and car)
     public void registerBus(String id, String make, String model, double rate,int seatCapacity, boolean hasAC) throws Exception{
+        //checks that the inputs cannot be null
+        if(id == null || id.trim().isEmpty()){
+            throw new IllegalArgumentException("Vehicle ID cannot be empty.");
+        }
+        if(make == null || make.trim().isEmpty()){
+            throw new IllegalArgumentException("Make cannot be empty.");
+        }
+        if(model == null || model.trim().isEmpty()){
+            throw new IllegalArgumentException("Model cannot be empty.");
+        }
+        if(rate <= 0){
+            throw new IllegalArgumentException("Rate must be positive.");
+        }
+        
         //this will check if the id is already linkd to other vehicel
         if(vehicleRepo.getById(id) != null){                                    //this will try to get a vehicle with same id if there is a vehicel with same id then throws an exception bcz id exists already
             throw new IllegalArgumentException("Vehicle ID '" + id + "' is already taken.");
@@ -81,6 +124,20 @@ public class CarRentalSystem{
 
     //for van (same logic as beofre)
     public void registerVan(String id, String make, String model, double rate,double cargoCapacityKg) throws Exception{
+        //checks that the inputs cannot be null
+        if(id == null || id.trim().isEmpty()){
+            throw new IllegalArgumentException("Vehicle ID cannot be empty.");
+        }
+        if(make == null || make.trim().isEmpty()){
+            throw new IllegalArgumentException("Make cannot be empty.");
+        }
+        if(model == null || model.trim().isEmpty()){
+            throw new IllegalArgumentException("Model cannot be empty.");
+        }
+        if(rate <= 0){
+            throw new IllegalArgumentException("Rate must be positive.");
+        }
+        
         //this will check if the id is already linkd to other vehicel
         if(vehicleRepo.getById(id) != null){                                    //this will try to get a vehicle with same id if there is a vehicel with same id then throws an exception bcz id exists already
             throw new IllegalArgumentException("Vehicle ID '" + id + "' is already taken.");
@@ -101,6 +158,32 @@ public class CarRentalSystem{
      */
 
     public void registerCustomer(String id, String name, String email, String phone, String password, String lic, String addr) throws Exception {
+        
+        //checks that the input is valid and not empty or unwanted
+        if(id == null || id.trim().isEmpty()){
+            throw new IllegalArgumentException("User ID cannot be empty.");
+        }
+        //name cannot be null
+        if(name == null || name.trim().isEmpty()){
+            throw new IllegalArgumentException("Name cannot be empty.");
+        }
+        // email cannot be null
+        if(email == null || email.trim().isEmpty()){
+            throw new IllegalArgumentException("Email cannot be empty.");
+        }
+        //will check that email must have @ sgin
+        if(!email.contains("@")){
+            throw new IllegalArgumentException("Invalid email format.");
+        }
+        //will ceheck that phone shouldnot be null
+        if(phone == null || phone.trim().isEmpty()){
+            throw new IllegalArgumentException("Phone cannot be empty.");
+        }
+        //it will check if the password is longer than 6 cahracters
+        if(password == null || password.length()<=6){
+            throw new IllegalArgumentException("Password Must be longer than 6 characters!");
+        }
+
         // checks the mathing id or emial
         if(userRepo.getById(id) != null){                               //if user with same id exists , throw exception
             throw new IllegalArgumentException("User ID '" + id + "' is already registered.");
@@ -120,11 +203,75 @@ public class CarRentalSystem{
         saveData();                 ///saves to the file
     }
 
+    //3.------------delete vehicle(with confirmation)-----------------------
+    public boolean deleteVehicle(String vehicleId, boolean forceDelete) throws Exception{
+        Vehicle v = vehicleRepo.getById(vehicleId);     //will get the vehicle with the id
+        
+        //vehicle must exist and cannot be null      
+        if(v == null){
+            throw new IllegalArgumentException("Vehicle not found.");
+        }
+        
+        //vehicle must not be currently rented or else cannot delete now
+        if(!v.getAvailibility()){               //checks the availability of the vehicle
+            throw new IllegalArgumentException("Cannot delete because Vehicle is currently rented out.");
+        }
+        
+        //collecst all rental records for this vehicle
+        ArrayList<RentalRecord> vehicleRecords = new ArrayList<>();
+        for(RentalRecord r : rentalRepo.getAll()){                      //checks the records one by one from the arraylist
+            if(r.getRentedVehicle().getVehicleId().equals(vehicleId)){  //if the vehicle is found in any record meaning it has a rental history
+                vehicleRecords.add(r);                                   //ADD to the list
+            }
+        }
+        
+        //if has history and user didn't confirm, returns false (GUI will show alert)
+        if (!vehicleRecords.isEmpty() && !forceDelete){
+            return false;  //signals GUI to show confirmation dialogue
+        }
+        
+        //If forceDelete = true or it has no history, proceed with deletion
+        
+        //deletes all the rental records associated with the vehicle
+        for (RentalRecord r : vehicleRecords) {
+            //remove from customers' history
+            r.getCustomer().removeRentalRecord(r);
+            //remove from rental repository
+            rentalRepo.delete(r);
+        }
+        
+        //delete the vehicle
+        vehicleRepo.delete(v);
+        saveData();                         //save to file
+        return true;                        //returns true
+    }
+
 
     //2. ==========================RENTAL LOGIC======================
 
-
     public void rentVehicle(String customerId, String vehicleId, LocalDate rentalDate, int days, Payable payment) throws Exception{
+        
+                //Input validations cheks
+            //customer id cant be null
+        if(customerId == null || customerId.trim().isEmpty()){
+            throw new IllegalArgumentException("Customer ID cannot be empty.");
+        }
+        //vehicle id cant be null.
+        if(vehicleId == null || vehicleId.trim().isEmpty()){
+            throw new IllegalArgumentException("Vehicle ID cannot be empty.");
+        }//payment cant be null.
+        if(payment == null){
+            throw new IllegalArgumentException("Payment method cannot be null.");
+        }
+        //we check that the rental date cannot be before today's date;
+        if(rentalDate==null || rentalDate.isBefore(LocalDate.now())){
+            throw new IllegalArgumentException("Rental Date Cannot be in the past!");
+        }
+        //rental days cannot be 0 or negative have to be atleast 1
+        if(days<=0){
+            throw new IllegalArgumentException("Rental Days must be atleast 1 !");
+        }
+
         //we will get the obejcts first using the ids
         User user = userRepo.getById(customerId);
         Vehicle vehicle = vehicleRepo.getById(vehicleId);
@@ -174,6 +321,12 @@ public class CarRentalSystem{
     }
 
     public void returnVehicle(String rentalId) throws Exception{
+        
+        //checks that the rental id is not null.
+        if(rentalId == null || rentalId.trim().isEmpty()){
+            throw new IllegalArgumentException("Rental ID cannot be empty.");
+        }
+
         //will get the rental record
         RentalRecord record = rentalRepo.getById(rentalId);
 

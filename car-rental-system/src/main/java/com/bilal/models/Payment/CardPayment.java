@@ -21,7 +21,11 @@ public class CardPayment implements Payable{
     @Override
     public boolean processPayment(double amount){
         LocalDate today = LocalDate.now();          //stores today's date (from computer)
-        this.temporaryAmount = amount;          //stores the amount temporarily for further use        
+        this.temporaryAmount = amount;          //stores the amount temporarily for further use     
+        if (amount <= 0) {
+            System.out.println("Invalid payment amount!");
+            return false;
+        }   
         if (!expiryDate.isBefore(today)){           //checks if the card is valid or not (not expired)
             System.out.println("Payment Success : "+ amount);   
             paymentStatus = true;                   //updates the payment status for furhter use

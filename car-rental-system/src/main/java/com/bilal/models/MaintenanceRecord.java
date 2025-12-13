@@ -1,8 +1,9 @@
 package com.bilal.models;
 
+import java.io.Serializable;
 import java.time.LocalDate; 
 
-public class MaintenanceRecord {
+public class MaintenanceRecord implements Serializable{
     private String description;
     private LocalDate date;
     private double cost;
@@ -11,6 +12,7 @@ public class MaintenanceRecord {
     public MaintenanceRecord(String description, LocalDate date, double cost){
         this.description = description;
         this.date = date;
+        this.cost = cost;
     }
 
     //getters

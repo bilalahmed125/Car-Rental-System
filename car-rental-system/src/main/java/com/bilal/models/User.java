@@ -1,6 +1,8 @@
 package com.bilal.models;
 
-public abstract class User{
+import java.io.Serializable;
+
+public abstract class User implements Serializable{
     private String name;
     private String email;
     private String userId;
@@ -21,6 +23,9 @@ public abstract class User{
         this.name = name;
     }
     public void setEmail(String email){
+        if(!email.contains("@")){
+            throw new IllegalArgumentException("Invalid email format.");
+        }
         this.email = email;
     }
     public void setPhone(String phone){
@@ -36,15 +41,14 @@ public abstract class User{
     public String getPhone(){return phone; }
 
     //methods
-    public boolean updatePassword(String pass){
+    public void updatePassword(String pass){
         //will only set password if the length of the pasword is >6
-        if(pass.length()>6){ 
-            this.password = pass;
-            return true;
+        if(pass.length()<=6)
+        {
+            throw new IllegalArgumentException("Password must be longer than 6 characters!");
         }
-        else{
-            return false;
-        }
+         this.password = pass;
+        
     }
 
     public boolean login(String pass){

@@ -15,9 +15,13 @@ public class VehicleRepository implements Repository<Vehicle>{
     }
 
     @Override
-    public void update(Vehicle item){   //come herelater 
-        //placeholder for future filehandling logic
-        System.out.println("PLEASE ADD FILE HANDLING LOGIC HERE ASAP!");
+    public void update(Vehicle item){           
+        for(int i = 0; i < vehicles.size(); i++){       //will run teh loop form 0 to size of arraylist, and check each of the arraylist's objects (stored) id
+            if(vehicles.get(i).getVehicleId().equals(item.getVehicleId())){     //if the Vehicle's id matches with the item 
+                vehicles.set(i, item);                                          // it will replace the vehicle with it.
+                return;                                                         //stops the method if done
+            }
+        }
     }
 
     @Override

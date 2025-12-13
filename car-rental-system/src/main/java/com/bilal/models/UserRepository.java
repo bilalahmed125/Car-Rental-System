@@ -19,9 +19,13 @@ public class UserRepository implements Repository<User>{
     }
 
     @Override
-    public void update(User item){      //comehere later
-        //placeholder for future filehandling logic
-        System.out.println("PLEASE ADD FILE HANDLING LOGIC HERE ASAP!");
+    public void update(User item){
+        for(int i = 0; i < users.size(); i++){      //this will run teh loop from 0 to size of arraylist.
+            if(users.get(i).getUserId().equals(item.getUserId())){  //will get id from each of the arraylist's user and match with the id of the passed parameter User (item)
+                users.set(i, item);                 //if the id is mathced, replaces the old user with the newer oone...
+                return;                             //when done, will stop the method
+            }
+        }
     }
 
     @Override
