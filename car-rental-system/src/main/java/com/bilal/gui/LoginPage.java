@@ -20,7 +20,7 @@ public class LoginPage{
     private void createView(){                      //createView method (will create the scene for us(the view))
         root = new BorderPane();                    //creates the border pane here(this pane allows centring the control , like in middle of the screen)
                                                     //setStyle allows us to apply CSS code, to javafx node  
-        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #201133ff, #4ca1af);");   
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(83, 77, 254, 1), #ebbb34ff);");   
                                                     //allows gradient too :) 
         //the login box containing the form
         VBox loginBox = new VBox(20);           //20 spacing between the controls                                  
@@ -69,7 +69,7 @@ public class LoginPage{
 
             if(sceneManager.login(id, pass)){          //This will now verify the details using the backend of system SceneManager->User(Password)+UserRepo(User id)
                 //login successful
-                sceneManager.showDashboard();          //shows DashBoard if the login is sueccessful 
+                sceneManager.showHomePage();          //shows DashBoard if the login is sueccessful 
             }
             else{                                      //login failed so show the label wanrnig 
                 lblMessage.setText("Invalid User ID or Password!");     //the label(line 61) will be set to the following text
@@ -92,7 +92,17 @@ public class LoginPage{
         //adding everything to the box
         loginBox.getChildren().addAll(lblTitle, lblSubtitle, new Separator() , txtId, txtPass, btnLogin, lblMessage, btnSignup );       //separator is line sort of thing that separates the above and below sections on the login box
         
-        root.setCenter(loginBox);               //the reason why we used this...Allows us to centre the control automatically                      
+        root.setCenter(loginBox);               //the reason why we used this...Allows us to centre the control automatically  
+        
+        //---------BACK BUTTON---------------------
+        Button btnBack = new Button("<- Back");
+        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+        btnBack.setOnAction(e -> sceneManager.returnToPreviousScene());
+
+        HBox topBar = new HBox(btnBack);            //hbox will have this button 
+        topBar.setPadding(new Insets(15));          //hbox's padding from the sides
+        topBar.setAlignment(Pos.CENTER_LEFT);       //position is centered left (veritcally centre and horizontally left)
+        root.setTop(topBar);                        //on the top of the border pane
     }
     
     public BorderPane getView(){            //returns the whole borderPane with all the required contorls

@@ -11,6 +11,9 @@ public class CardPayment implements Payable{
     private boolean paymentStatus = false;
 
     public CardPayment(String cardNumber, String cardHolderName, LocalDate expiryDate){
+        if(!isNumeric(cardNumber)){
+            throw new IllegalArgumentException("Error: INValid Card Number.");
+        }
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
         this.expiryDate = expiryDate;
@@ -23,17 +26,15 @@ public class CardPayment implements Payable{
         LocalDate today = LocalDate.now();          //stores today's date (from computer)
         this.temporaryAmount = amount;          //stores the amount temporarily for further use     
         if (amount <= 0) {
-            System.out.println("Invalid payment amount!");
-            return false;
+            throw new IllegalArgumentException("Invalid payment amount!");
         }   
-        if (!expiryDate.isBefore(today)){           //checks if the card is valid or not (not expired)
-            System.out.println("Payment Success : "+ amount);   
+        if(!expiryDate.isBefore(today)){           //checks if the card is valid or not (not expired)
+            // System.out.println("Payment Success : "+ amount);   
             paymentStatus = true;                   //updates the payment status for furhter use
             return true;                
         }
         else{
-            System.out.println("Card is expired! Payment failed");
-            return false;
+            throw new IllegalArgumentException("Card is expired! Payment failed");
         }
     }
     @Override
@@ -44,8 +45,16 @@ public class CardPayment implements Payable{
             
         }
         else{
-            return "Payment of Amount: " + temporaryAmount + " | Failed!  | CardHolder Name: "+cardHolderName ;
+            return "Payment of Amount: " + temporaryAmount + " Failed!  | CardHolder Name: "+cardHolderName ;
         }
     }
-
+    //checks if the cardNumber shouldnot hold any numbers in it;
+    public boolean isNumeric(String str){
+    for(char c : str.toCharArray()){                //it will first convert string to characters array, then check each cahracter one by one
+        if(!Character.isDigit(c)){                  //if any character is not digit(meaning non nubmeric) then reutnr false
+            return false;
+        }
+    }
+        return true;                            //if no nonnumber found then returns true.
+    }
 }

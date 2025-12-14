@@ -26,7 +26,7 @@ public class SignupPage{
         
         //setting same gradient background as login page for UI consistency
         //setStyle allows us to apply CSS directly on JavaFX node
-        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #201133ff, #4ca1af);");
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #87e9cdff, #c764d2ff);");
 
         //the signup box (in vbox) form
         VBox signupBox = new VBox(15);                     //15 vertical spacing between controls
@@ -142,6 +142,18 @@ public class SignupPage{
         //placing the signup box in the center of BorderPane
         //BorderPane handles resizing automatically
         root.setCenter(signupBox);
+
+        //---------BACK BUTTON--------------------- (copied as is from loginpage)
+        Button btnBack = new Button("<- Back");
+        btnBack.setStyle("-fx-font-weight: bold ;-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+        btnBack.setOnAction(e -> sceneManager.returnToPreviousScene());
+
+        HBox topBar = new HBox(btnBack);
+        topBar.setPadding(new Insets(15));
+        topBar.setAlignment(Pos.CENTER_LEFT);
+
+        root.setTop(topBar);
+
     }
 
     //Helper method to create same styled text fields
