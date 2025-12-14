@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public abstract class Vehicle implements Rentable,Trackable,Serializable{
+public abstract class Vehicle implements Rentable,Serializable{
 
     private String vehicleId;
     private String make;
     private String model;
     private boolean isAvailable;
     private double baseRatePerDay;
-    private String currentLocation = "N/A";
 
     //Discount Fields
     private double currentRate; 
@@ -33,7 +32,6 @@ public abstract class Vehicle implements Rentable,Trackable,Serializable{
 
             //setter geetters
     //setters
-    public void setVehicleId(String id){ this.vehicleId = id; }
     public void setMake(String make){ this.make = make; }
     public void setModel(String model){ this.model = model;}
     public void setBaseRatePerDay(double rate){this.baseRatePerDay = rate;}
@@ -93,17 +91,6 @@ public abstract class Vehicle implements Rentable,Trackable,Serializable{
     public double calculateRentalCost(int days){
         return currentRate * days;
     } 
-    
-    @Override
-    public void updateLocation(String gps){ 
-        this.currentLocation = gps;
-    }
-    
-    @Override
-    public String getCurrentLocation(){
-        return currentLocation;
-    }
-
     
     /*toString() is a method from Object calss, and we basically manipulate how the print msg will be wehn we try to sout(Vehicle/Car), 
     we can customize the printed msg instad of address to what we return from this method */

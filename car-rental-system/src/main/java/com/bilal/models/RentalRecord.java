@@ -70,29 +70,7 @@ public class RentalRecord implements Serializable{
         this.paymentMethod = method;
         this.paymentDetails = details;
     }
-    //method for payment handling
-    // public boolean processPayment(Payable payment){
-    //     if(isPaid){         //meaning the payment is already done
-    //         return false;
-    //     }
-        
-    //     boolean success = payment.processPayment(totalCost);
-        
-    //     if(success){
-    //         this.isPaid = true;
-    //         this.paymentDetails = payment.getPaymentDetails();
-
-    //         //Determine payment method from the details string
-    //         if(paymentDetails.contains("Card")){
-    //             this.paymentMethod = "Card";
-    //         }
-    //         else if(paymentDetails.contains("Cash")){
-    //             this.paymentMethod ="Cash";
-    //         }
-    //     }
-    //     return success;
-    // }
-
+    
     //Return the vehicel (date)
     public void returnVehicle(LocalDate actualReturn){
         this.actualReturnDate = actualReturn;
