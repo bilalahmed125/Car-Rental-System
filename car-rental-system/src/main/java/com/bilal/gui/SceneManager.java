@@ -74,8 +74,10 @@ public class SceneManager{
             // will call this showAdminDashboard();
         }
         else if(currentUser instanceof Customer){
-            System.out.println("Redirecting to Customer Dashboard...");
-            //will call this showCustomerDashboard();
+            //connecting teh dashboard with customer
+            CustomerDashboard custDash = new CustomerDashboard(this, system, (Customer) currentUser);
+            primaryStage.setScene(new Scene(custDash.getView(), 1200, 800));
+            primaryStage.setTitle("My Dashboard");
         }
     }
 
