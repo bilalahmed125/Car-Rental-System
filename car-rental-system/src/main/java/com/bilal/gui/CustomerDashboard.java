@@ -105,7 +105,7 @@ public class CustomerDashboard{
         TableColumn<RentalRecord, String> colVehicle = new TableColumn<>("Vehicle");
         //cell value factory tells the column what data to show for each row
         colVehicle.setCellValueFactory(cell -> 
-            new SimpleStringProperty(cell.getValue().getRentedVehicle().getModel())         //getValue() gets the rentalRecord obeject , then the getstatus is its getter, the simpleStringproerty is observable string (Wrapper around String)                 
+            new SimpleStringProperty(cell.getValue().getRentedVehicle().getMake()+" "+cell.getValue().getRentedVehicle().getModel())         //getValue() gets the rentalRecord obeject , then the getstatus is its getter, the simpleStringproerty is observable string (Wrapper around String)                 
         );
         //SimpleStringProperty is used because TableView works with ObservableValues, not raw strings
 
@@ -146,8 +146,9 @@ public class CustomerDashboard{
 
                     if(empty){
                         setGraphic(null);   //empty row? no buttons
-                    } else{
-                        RentalRecord record = getTableView().getItems().get(getIndex()); //get rental record for this row
+                    } else{                     //this line simply stores the Rentalrecord from the rows in the refrence
+                        RentalRecord record = getTableView().getItems().get(getIndex()); //gets rental record using the row number(getIndex),
+                                //then we get the ObservableList<RentalRecord> object (getItmes), ten 
 
                         btnReturn.setOnAction(e -> handleReturn(record));  //call return function
                         btnCancel.setOnAction(e -> handleCancel(record));  //call cancel function
@@ -169,7 +170,7 @@ public class CustomerDashboard{
 
     //----------REFRESH TABLE DATA------
     private void refreshTables(){
-        activeTable.getItems().clear();   //clear previous data
+                                                                                                                       activeTable.getItems().clear();   //clear previous data
         historyTable.getItems().clear();
 
         for(RentalRecord r : customer.getRentalHistory()){   //iterate over all rentals
@@ -189,7 +190,7 @@ public class CustomerDashboard{
             system.returnVehicle(record.getRentalId());   //tell backend system vehicle is returned
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);  //popup info
-            alert.setContentText("Vehicle Returned! Cost: " + record.getTotalCost());
+            alert.setContentText("Vehicle Returned! Thanks For using our service :)");
             alert.showAndWait();   //wait user ok
 
             refreshTables();      //refresh tables after return
@@ -204,7 +205,7 @@ public class CustomerDashboard{
             record.cancelRental();   //cancel in memory, not saved unless system.saveData() called later
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Booking Cancelled.");
+            alert.setContentText("Booking Cancelled! Cash will be transfered to you!");
             alert.showAndWait();     //wait user ok
 
             refreshTables();         //refresh tables after cancel

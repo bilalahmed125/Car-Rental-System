@@ -46,6 +46,7 @@ public abstract class Vehicle implements Rentable,Serializable{
     public boolean getAvailibility(){ return isAvailable; }
     public double getCurrentRate(){ return currentRate; }
     public boolean getIsDiscountAvailable(){ return isDiscountActive; }
+    public ArrayList<MaintenanceRecord> getMaintenanceRecord(){ return new ArrayList<>(maintenanceHistory);}
 
     //methods
     public void addMaintenanceRecord(String description, LocalDate date,double cost){

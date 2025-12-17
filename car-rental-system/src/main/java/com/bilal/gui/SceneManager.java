@@ -6,6 +6,7 @@ import com.bilal.models.CarRentalSystem;
 import com.bilal.models.User;
 import com.bilal.models.users.Admin;
 import com.bilal.models.users.Customer;
+import com.bilal.models.Vehicle;
 
 public class SceneManager{
     
@@ -70,8 +71,10 @@ public class SceneManager{
     //(we will add Admin/Customer dashboard methods here later)
     public void showDashboard(){
         if(currentUser instanceof Admin){
-            System.out.println("Redirecting to Admin Dashboard...");
-            // will call this showAdminDashboard();
+            /// connects the admindashborad with admin
+            AdminDashboard adminDash = new AdminDashboard(this, system, (Admin) currentUser);
+            primaryStage.setScene(new Scene(adminDash.getView(), 1200, 800));
+            primaryStage.setTitle("Admin Dashboard");
         }
         else if(currentUser instanceof Customer){
             //connecting teh dashboard with customer
@@ -79,6 +82,12 @@ public class SceneManager{
             primaryStage.setScene(new Scene(custDash.getView(), 1200, 800));
             primaryStage.setTitle("My Dashboard");
         }
+    }
+    
+    public void showVehicleDetails(Vehicle v){
+        VehicleDetails vd = new VehicleDetails(this,system,v); 
+        primaryStage.setScene(new Scene(vd.getView(),1200,800));
+        primaryStage.setTitle("Vehicle Details");
     }
 
     //----------GETTERS------------------

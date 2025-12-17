@@ -71,7 +71,7 @@ public class HomePage{
         HBox.setHgrow(spacer, Priority.ALWAYS);                 //setHgrow is static method of HBOX , and tells how to treat the spacer
                                                                 //tells the spacer how much to grow to keep the childrens to desired side and always tells it to always grow when empty horizontal space is found
         //dynamic buttons this Logic is to check if user is logged in
-        HBox authButtons = new HBox(10);                        //new Hbox to change if logged in or not logged in
+        HBox authButtons = new HBox(10);                       //new Hbox to change if logged in or not logged in
         
        if(sceneManager.isLoggedIn()){
             //IF LOGGED UP then Show "Dashboard" and "Logout' buttons
@@ -146,7 +146,7 @@ public class HomePage{
     //3.-------------------DYNAMIC CONTENT LOGIC--------------------------------
     
     //reads from system list and draws tiles (cards)
-    private void refreshVehicles(){                     
+    protected void refreshVehicles(){                     
         vehicleGrid.getChildren().clear();              //clear old tiles
 
         ArrayList<Vehicle> allVehicles = system.getVehicleRepo().getAll();          //arraylist will store the arraylist that it will get from the Vehicle Repository System.
@@ -171,16 +171,16 @@ public class HomePage{
     private VBox createVehicleTile(Vehicle v){              
         VBox card = new VBox(10);                       //VBOX is used for that with a spacing of 10
         card.setPadding(new Insets(15));                // the padding is 15 px
-        card.setPrefWidth(220);                         //fixed width for consistent sizeing
-        card.setAlignment(Pos.CENTER);                  //the card are alligned in teh centre of teh
+        card.setPrefWidth(250);                         //fixed width for consistent sizeing
+        card.setAlignment(Pos.CENTER);                  //the data in cards are alligned in teh centre of vbox
         
         //defaultstyle (white box with shadow)s
         String defaultStyle = "-fx-background-color: white; -fx-background-radius: 10; " +             //this wil set backgound to white and the corners will be rounded by radius 10
                               "-fx-effect: dropshadow(gaussian , rgba(0,0,0,0.1), 5, 0, 0, 0);";     // gaussian is the shoadow algorithm, 5,0,0,0 (blur radius(softness of shadow), spread (how much shadow expands) , x offest(move shadow left right), y offset (move shadwo up down) )    
         
         //hover styling(Light Blue)
-        String hoverStyle = "-fx-background-color: #cff0ffff; -fx-background-radius: 10; " +        //when mouse moves above it , the tile's backgound wil be light bluish, corner will be rounded by radius 10,  
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 0);";       //shadow effect, gaussian is shadow calculating algo , and rgba is color, 8000 is blur radius, speread , x and y offsets
+        String hoverStyle = "-fx-background-color: #738a9478; -fx-background-radius: 10; " +        //when mouse moves above it , the tile's backgound wil be light bluish, corner will be rounded by radius 10,  
+                            "-fx-effect: dropshadow(gaussian, rgba(90, 54, 50, 1), 10, 0, 0, 0);";       //shadow effect, gaussian is shadow calculating algo , and rgba is color, 8000 is blur radius, speread , x and y offsets
         
         card.setStyle(defaultStyle);                                                                //card by default will have default styling that we made
         // Hover Events                 
@@ -210,25 +210,28 @@ public class HomePage{
             oldPrice.setStyle("-fx-strikethrough: true; -fx-text-fill: #999;");  //the old price will have an effect which will get stricked through and the color of text will become grey
 
             Label newPrice = new Label("$" + v.getCurrentRate() + " / day");        //new price label creaeted and new price is getted using getter of vehicle.java
-            newPrice.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");        //the new price color will become red and the font will be bold 
+            newPrice.setStyle("-fx-text-fill: green ; -fx-font-weight: bold;");        //the new price color will become red and the font will be bold 
             
             priceBox.getChildren().addAll(oldPrice, newPrice);                      //VBOX(priceBox) will get both the old and new value
         }
         else{                                                             //if tehre is no discount then it will only show the origianl price
             Label price = new Label("$" + v.getBaseRatePerDay() + " / day");   //gets the base rate perday usign the getter from vehcile.java
-            price.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");     //color to green and weigth to bold
+            price.setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");     //color to green and weigth to bold
             priceBox.getChildren().add(price);                                  //feed into priceBox (Vbox)
         }
 
         //status Text
         Label lblStatus = new Label(v.getAvailibility() ? "Available" : "Rented Out");                  //if the car is available label is set to Available else Rented Out (this is ternary operator short form of if else)
-        lblStatus.setStyle(v.getAvailibility() ? "-fx-text-fill: #27ae60;" : "-fx-text-fill: red;");  //based on the availibility the text color is chosen if available then color wil be green else red (Again ternary operator short form of if else) 
+        lblStatus.setStyle(v.getAvailibility() ? "-fx-text-fill: #45a76eff;" : "-fx-text-fill: red;");  //based on the availibility the text color is chosen if available then color wil be green else red (Again ternary operator short form of if else) 
 
         //----------3.RENT BUTTON------------
         Button btnRent = new Button("Rent Now!");                   //creating a button rent Now
-        btnRent.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;"); //the button will be of color green with white text and cursor will be hand when over it
+        btnRent.setStyle("-fx-background-color: linear-gradient(to right, rgba(72, 172, 75, 1) , rgba(68, 83, 222, 1)); -fx-text-fill: white; -fx-cursor: hand;"); //the button will be of color green with white text and cursor will be hand when over it
         btnRent.setPrefWidth(180);                              //button's width is 180 piexels (chorai of button)
-
+        Button btnShow = new Button("See detials");
+        btnShow.setStyle("-fx-background-color: rgba(197, 111, 205, 1); -fx-text-fill:white; -fx-cursor: hand;");
+        btnShow.setPrefWidth(130);
+        
         //if rented, disable button
         if(!v.getAvailibility()){                                   //if vehicle is not available then the button shouldnt show rentnow       
             btnRent.setDisable(true);                               //so we diable the button (a method of button)
@@ -250,9 +253,13 @@ public class HomePage{
                 sceneManager.showLoginPage();
             }
         });
+        //-------------------------------action of showdetials button_--------------------------------
+        btnShow.setOnAction(e -> {
+            sceneManager.showVehicleDetails(v);
+        });
 
         //adding everything to the card
-        card.getChildren().addAll(lblIcon, lblName, priceBox, lblStatus, new Separator(), btnRent);
+        card.getChildren().addAll(lblIcon, lblName, priceBox, lblStatus, new Separator(), btnRent,btnShow);
         return card;                //returns the card (VBOX)
     }
 
