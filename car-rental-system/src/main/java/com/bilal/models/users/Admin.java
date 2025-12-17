@@ -68,7 +68,7 @@ public class Admin extends User{
     //get the active rental of a customer
     public RentalRecord getActiveRental(Customer c){
         for(RentalRecord r : c.getRentalHistory()){
-            if(r.getStatus().equals("ACTIVE")){
+            if(r.getStatus().equals("ACTIVE") || r.getStatus().equals("OVERDUE")){
                 return r;         //found an active renatal
             }
         }

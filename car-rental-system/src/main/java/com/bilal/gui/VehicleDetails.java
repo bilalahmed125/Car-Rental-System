@@ -5,7 +5,10 @@ import com.bilal.models.*;
 import com.bilal.models.users.Customer;
 import com.bilal.models.vehicles.*;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -104,6 +107,8 @@ public class VehicleDetails {
         top.getChildren().addAll(back,lblTitle,spacer,home,btnRent);
         return top;
     }
+        TableView<MaintenanceRecord> table = new TableView<>();
+
         //SIDEBAR CREATION
     private VBox createSideBar(){
         VBox sideBar = new VBox(15);
@@ -164,7 +169,7 @@ public class VehicleDetails {
 
         VBox dialog = new VBox(15);
         dialog.setPadding(new Insets(20));
-        dialog.setPrefWidth(500);
+        dialog.setPrefWidth(400);
         dialog.setAlignment(Pos.CENTER);
         
         Label lblhead = new Label("ADD Maintenance Record for "+currentVehicle.getMake()+" "+currentVehicle.getModel());
@@ -181,19 +186,25 @@ public class VehicleDetails {
         TextArea desc = new TextArea();
         desc.setPromptText("Please add a descritpion [optional]");
         desc.setMaxWidth(Double.MAX_VALUE);
-        
-        if(desc.getText().isEmpty()){
-            desc.setText("Unknown");
-        }
+        desc.setPrefHeight(100);
 
-        Button btnAdd = new Button("Add");
-        btnAdd.setStyle("-fx-background-color: #afff5eff; -fx-text-fill:white; -fx-cursor: hand;");
+        Button btnAdd = new Button("Add Record");
+        btnAdd.setMaxWidth(Double.MAX_VALUE);
+        btnAdd.setStyle("-fx-background-color: #99ef43ff; -fx-text-fill:white; -fx-cursor: hand;");
         
         btnAdd.setOnAction(e->{
-        if(!(cost.getText().isEmpty() || date.getValue() == null)){
-            
-                currentVehicle.addMaintenanceRecord(desc.getText(), date.getValue(), Double.parseDouble(cost.getText()));
-                new Alert(Alert.AlertType.INFORMATION, "Maintenance Record Added").show();
+        if(!(cost.getText().trim().isEmpty() || date.getValue() == null)){
+                try{
+                    if(desc.getText().trim().isEmpty()){
+                        desc.setText("UNKNOWN");
+                    } 
+                    system.addMaintenance(currentVehicle.getVehicleId() ,desc.getText(), date.getValue(), Double.parseDouble(cost.getText()));
+                    refreshTable(table);
+                    
+                    new Alert(Alert.AlertType.INFORMATION, "Maintenance Record Added").show();
+                } catch(Exception ex){
+                    new Alert(Alert.AlertType.ERROR,"ADDITION FAILED: " +ex.getMessage()).show();
+                }
                 stage.close();
         }
         else{
@@ -205,6 +216,11 @@ public class VehicleDetails {
         stage.setScene(new Scene(dialog));
         stage.showAndWait();
 
+    }
+    private void refreshTable(TableView<MaintenanceRecord> maintenanceTable){
+        if(maintenanceTable != null) {
+            maintenanceTable.getItems().setAll(currentVehicle.getMaintenanceRecord());
+        }
     }   
 
 
@@ -256,7 +272,7 @@ public class VehicleDetails {
         VBox content = new VBox(20);
         content.setPadding(new Insets(30));
 
-        TableView<MaintenanceRecord> table = new TableView<>();
+        table = new TableView<>();
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -285,8 +301,9 @@ public class VehicleDetails {
         colDesc.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDescription()));
 
         table.getColumns().addAll(colSr,colDate,colCost,colDesc);
-        table.getItems().setAll(currentVehicle.getMaintenanceRecord());
+        table.getItems().setAll(FXCollections.observableArrayList(currentVehicle.getMaintenanceRecord()));
 
+        refreshTable(table);
         return table;
     }
 

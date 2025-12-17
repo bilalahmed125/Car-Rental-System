@@ -79,8 +79,10 @@ public class AdminDashboard{
         double totalMoney = 0;
         //loop throgh all rentals to sum up teh costs
         for(RentalRecord r : system.getRentalRepo().getAll()){
-            totalMoney += r.getTotalCost(); //adding cost to total
-        }
+            if(r.getStatus().equals("ACTIVE") || r.getStatus().equals("COMPLETED") || r.getStatus().equals("OVERDUE"))
+                totalMoney += r.getTotalCost(); //adding cost to total
+            }
+        
         //Show Total money Label
         Label lblCash = new Label("Total Cash: $" + totalMoney);
         lblCash.setFont(Font.font("", FontWeight.BOLD, 20));
