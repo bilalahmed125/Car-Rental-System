@@ -27,6 +27,7 @@ public class Main extends Application{
         launch();
     }
 
+    @SuppressWarnings("exports")
     public void initializeSampleData(CarRentalSystem system){
         try {
             //---Create Default Admin----

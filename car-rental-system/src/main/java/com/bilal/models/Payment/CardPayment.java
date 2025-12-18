@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class CardPayment implements Payable{
     
+    @SuppressWarnings("unused")
     private String cardNumber;
     private String cardHolderName;
     private LocalDate expiryDate;

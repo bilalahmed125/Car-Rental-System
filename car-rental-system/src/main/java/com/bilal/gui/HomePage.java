@@ -179,7 +179,7 @@ public class HomePage{
                               "-fx-effect: dropshadow(gaussian , rgba(0,0,0,0.1), 5, 0, 0, 0);";     // gaussian is the shoadow algorithm, 5,0,0,0 (blur radius(softness of shadow), spread (how much shadow expands) , x offest(move shadow left right), y offset (move shadwo up down) )    
         
         //hover styling(Light Blue)
-        String hoverStyle = "-fx-background-color: #738a9478; -fx-background-radius: 10; " +        //when mouse moves above it , the tile's backgound wil be light bluish, corner will be rounded by radius 10,  
+        String hoverStyle = "-fx-background-color: #d5f2ffff; -fx-background-radius: 10; " +        //when mouse moves above it , the tile's backgound wil be light bluish, corner will be rounded by radius 10,  
                             "-fx-effect: dropshadow(gaussian, rgba(90, 54, 50, 1), 10, 0, 0, 0);";       //shadow effect, gaussian is shadow calculating algo , and rgba is color, 8000 is blur radius, speread , x and y offsets
         
         card.setStyle(defaultStyle);                                                                //card by default will have default styling that we made

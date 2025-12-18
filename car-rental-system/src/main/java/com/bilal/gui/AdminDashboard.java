@@ -14,6 +14,8 @@ import com.bilal.models.*;
 import com.bilal.models.users.Admin;
 import com.bilal.models.users.Customer;
 import com.bilal.models.vehicles.*;
+@SuppressWarnings("unused")
+
 
 public class AdminDashboard{
 
@@ -93,6 +95,7 @@ public class AdminDashboard{
     }
 
                     //-------------VIEW2 iS MANAGEVEHICLES--------------
+    @SuppressWarnings("unchecked")
     private void showVehiclesView(){
         VBox content = new VBox(15);                         //main container for vehicles
         content.setPadding(new Insets(20));                 //padding around content
@@ -163,6 +166,7 @@ public class AdminDashboard{
     }
 
                 //----------------VIEW3 is MANAGEUSERS-------------------------
+    @SuppressWarnings("unchecked")
     private void showUsersView(){
         VBox content = new VBox(15);                                  //content container
         content.setPadding(new Insets(20));                             //padding
@@ -213,6 +217,7 @@ public class AdminDashboard{
     }
 
                 //---------------VIEW4 IS ACTIVERENTALS-----------------
+    @SuppressWarnings("unchecked")
     private void showRentalsView(){
         VBox content = new VBox(20);                 //main container
         content.setPadding(new Insets(30));                 //padding

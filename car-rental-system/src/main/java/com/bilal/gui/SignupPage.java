@@ -85,7 +85,6 @@ public class SignupPage{
 
         //Label to show error or success messages
         Label lblMessage = new Label();
-        // lblMessage.setWrapText(true);           //allows long messages to go to next line
         lblMessage.setStyle("-fx-text-fill: red;"); 
 
         //==================ACTIONS==================

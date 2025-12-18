@@ -170,7 +170,7 @@ public class CustomerDashboard{
 
     //----------REFRESH TABLE DATA------
     private void refreshTables(){
-                                                                                                                       activeTable.getItems().clear();   //clear previous data
+        activeTable.getItems().clear();   //clear previous data
         historyTable.getItems().clear();
 
         for(RentalRecord r : customer.getRentalHistory()){   //iterate over all rentals
@@ -203,7 +203,6 @@ public class CustomerDashboard{
     private void handleCancel(RentalRecord record){
         try{
             record.cancelRental();   //cancel in memory, not saved unless system.saveData() called later
-
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Booking Cancelled! Cash will be transfered to you!");
             alert.showAndWait();     //wait user ok

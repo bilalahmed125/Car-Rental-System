@@ -5,10 +5,8 @@ import com.bilal.models.*;
 import com.bilal.models.users.Customer;
 import com.bilal.models.vehicles.*;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -268,6 +266,7 @@ public class VehicleDetails {
         return content;
     }
     //Helper creator of table for the centre 
+    @SuppressWarnings("unchecked")
     private TableView<MaintenanceRecord> createMaintenanceTable(){
         VBox content = new VBox(20);
         content.setPadding(new Insets(30));
