@@ -346,7 +346,7 @@ public class CarRentalSystem{
 
     //3.================================================FILE HANDLING===============================
     
-    private void saveData(){    
+    public void saveData(){    
         try{
             //create the file and wrtigin stream
             FileOutputStream fos = new FileOutputStream("car_rental_data.dat");

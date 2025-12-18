@@ -202,12 +202,13 @@ public class CustomerDashboard{
     //------HANDLE CANCEL VEHICLE---------
     private void handleCancel(RentalRecord record){
         try{
-            record.cancelRental();   //cancel in memory, not saved unless system.saveData() called later
+            record.cancelRental();  
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Booking Cancelled! Cash will be transfered to you!");
             alert.showAndWait();     //wait user ok
 
             refreshTables();         //refresh tables after cancel
+            system.saveData();
         } catch(Exception e){
             new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();  //error alert
         }
